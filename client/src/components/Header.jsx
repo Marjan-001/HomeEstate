@@ -9,13 +9,13 @@ export default function Header() {
           <span className="text-white">Home</span>
           <span className="text-white">Estate</span>
         </h1>
-        <form className="bg-white p-3 rounded-lg flex items-center">
+        <form className="bg-white py-2 pX-3 rounded-lg flex items-center">
           <input
             type="text"
             placeholder="  Search..."
             className="bg-transparent w-24 lg:w-64 focus:outline-none"
           />
-          <FaSearch className="text-slate-500" />
+          <FaSearch className="text-slate-500 mr-3" />
         </form>
         <ul className=" flex gap-3">
           <Link to="/">
