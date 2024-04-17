@@ -9,7 +9,6 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-
   const handleForm = (e) => {
     setFormData({
       ...formData,
@@ -37,7 +36,7 @@ const Register = () => {
       }
       setLoading(false);
       setError(null);
-      navigate('signin')
+      navigate("/signin");
     } catch (error) {
       setLoading(false);
 
@@ -81,10 +80,12 @@ const Register = () => {
       <div className="mt-2 flex gap-1">
         <p>Already have an account?</p>
         <Link to={"/signin"} className="text-blue-600">
-          {" "}
+
+{" "}
           <span>Sign in</span>
         </Link>
       </div>
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };
