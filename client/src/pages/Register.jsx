@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 const Register = () => {
   const [formData, setFormData] = useState({});
@@ -76,6 +77,7 @@ const Register = () => {
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>
+        <OAuth/>
       </form>
       <div className="mt-2 flex gap-1">
         <p>Already have an account?</p>
@@ -85,7 +87,6 @@ const Register = () => {
           <span>Sign in</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };

@@ -2,10 +2,11 @@ import User from "../model/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  const bcryptPassword = bcryptjs.hashSync(password, 10);
+  const bcryptPassword = bcryptjs.hash(password, 10);
   const newUser = new User({ username, email, password: bcryptPassword });
   try {
     await newUser.save();
@@ -31,5 +32,56 @@ export const signin = async (req, res, next) => {
       .json(rest);
   } catch (error) {
     next(error);
+  }
+};
+
+
+export const google = async (req, res, next) => {
+  try {
+    const { email, name, photo } = req.body;
+
+    // Check if the user already exists in the database
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // User exists, generate JWT token for authentication
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h' // Token expires in 1 hour (adjust as needed)
+      });
+
+      // Remove sensitive fields (e.g., password) before sending the response
+      const { password, ...userData } = user._doc;
+
+      // Send token and user data in response
+      res.cookie('access_token', token, { httpOnly: true }).status(200).json(userData);
+    } else {
+      // User doesn't exist, create a new user
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcryptjs.hash(generatedPassword, 10);
+
+      const newUser = new User({
+        username: name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-4),
+        email,
+        password: hashedPassword,
+        avatar: photo
+      });
+
+      await newUser.save();
+
+      // Generate JWT token for the new user
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h' // Token expires in 1 hour (adjust as needed)
+      });
+
+      // Remove sensitive fields (e.g., password) before sending the response
+      const { password, ...userData } = newUser._doc;
+
+      // Send token and user data in response
+      res.cookie('access_token', token, { httpOnly: true }).status(200).json(userData);
+    }
+  } catch (error) {
+    next(error); // Forward the error to the global error handler
   }
 };

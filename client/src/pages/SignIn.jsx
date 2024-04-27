@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const {loading,error}= useSelector((state)=>state.user)
  const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -65,6 +67,7 @@ const SignIn = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
+        <OAuth/>
       </form>
       <div className="mt-2 flex gap-1">
         <p>Do not have an account?</p>
@@ -72,8 +75,9 @@ const SignIn = () => {
           {" "}
           <span>Sign Up</span>
         </Link>
+        
       </div>
-      {error && <p className=" text-sm text-red-500">{error}</p>}
+    
     </div>
   );
 };
