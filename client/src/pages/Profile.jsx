@@ -11,6 +11,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signoutUserFailure,
+  signoutUserStart,
+  signoutUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -58,7 +61,6 @@ const Profile = () => {
   };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-
   };
 
   const handleSubmit = async (e) => {
@@ -66,9 +68,9 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
       const res = await fetch(`api/user/update/${currentUser._id}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-        'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -87,22 +89,37 @@ const Profile = () => {
 
   //delete account
 
-  const handleDelete = async()=>{
-try {
-  dispatch(deleteUserStart());
-  const res = await fetch(`/api/user/delete/${currentUser._id}`,{
-    method:'DELETE',
-  })
-const data = res.json();
-if(data.success===false){
-  dispatch(deleteUserFailure(data.message))
-  return
-}
-dispatch(deleteUserSuccess(data))
-} catch (error) {
-  dispatch(deleteUserFailure(error.message))
-}
-  }
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+  // signout
+  const handleSignOut = async () => {
+    try {
+      dispatch(signoutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signoutUserFailure(data.message));
+        return;
+      }
+      dispatch(signoutUserSuccess(data));
+    } catch (error) {
+      dispatch(signoutUserFailure(error.message));
+    }
+  };
 
   return (
     <div className=" p-3 max-w-lg mx-auto">
@@ -171,10 +188,18 @@ dispatch(deleteUserSuccess(data))
         </button>
       </form>
       <div className="flex justify-between text-white items-center">
-        <span onClick={handleDelete} className="bg-red-500 p-1 rounded-md text-[12px]">
+        <span
+          onClick={handleDelete}
+          className="bg-red-500 p-1 cursor-pointer rounded-md text-[12px]"
+        >
           Delete Account
         </span>
-        <span className="bg-red-500 p-1 rounded-md text-[12px]">Sign Out</span>
+        <span
+          onClick={handleSignOut}
+          className="bg-red-500 p-1 cursor-pointer rounded-md text-[12px]"
+        >
+          Sign Out
+        </span>
       </div>
       <p className="text-red-700 mt-5">{error ? error : ""}</p>
       <p className="text-green-700 mt-5">
