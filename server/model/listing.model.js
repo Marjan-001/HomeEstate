@@ -19,7 +19,7 @@ const listingSchema = new mongoose.Schema({
   },
   discountedPrice: {
     type: Number,
-    required: true,
+   
   },
   bathrooms: {
     type: Number,
@@ -28,27 +28,24 @@ const listingSchema = new mongoose.Schema({
   bedrooms: { type: Number, required: true },
   furnished:{
     type:Boolean,
-    required:true
+    
   },
   parking:{
     type:Boolean,
-    required:true
+    
   },
-  propertyType:{
+  type:{
     type:String,
     required:true
   },
-  pets:{
-    type:Boolean,
-    required:true
-  },
+ 
   offer:{
     type:Boolean,
-    required:true
+   
   },
   imageUrls:{
     type:Array,
-    requored:true
+    required:true
   },
   userRef:{
     type:String,
