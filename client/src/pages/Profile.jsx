@@ -118,6 +118,7 @@ const Profile = () => {
         dispatch(signoutUserFailure(data.message));
         return;
       }
+      
       dispatch(signoutUserSuccess(data));
     } catch (error) {
       dispatch(signoutUserFailure(error.message));
@@ -294,15 +295,15 @@ const Profile = () => {
                 >
                   Delete
                 </button>
+                <Link to={`/update-listing/${listing._id}`}>
                 <button className="text-green-700  text-sm">Edit</button>
+                </Link>
               </div>
             </div>
           ))}
         </div>
       )}
-      {userListings.length ===0 && (
-        <p className="text-lg text-red-600">You do not have any listing yet</p>
-      )}
+     
     </div>
   );
 };
