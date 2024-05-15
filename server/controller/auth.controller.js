@@ -45,9 +45,7 @@ export const google = async (req, res, next) => {
 
     if (user) {
       // User exists, generate JWT token for authentication
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '1h' // Token expires in 1 hour (adjust as needed)
-      });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
       // Remove sensitive fields (e.g., password) before sending the response
       const { password, ...userData } = user._doc;

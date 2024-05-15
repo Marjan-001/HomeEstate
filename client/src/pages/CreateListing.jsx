@@ -175,7 +175,7 @@ const CreateListing = () => {
             placeholder="Name"
             className="border p-3 rounded-md"
             maxLength="50"
-            minLength="8"
+            minLength="4"
             id="name"
             onChange={handleChange}
             value={formData.name}

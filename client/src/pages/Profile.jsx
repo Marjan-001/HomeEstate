@@ -300,6 +300,9 @@ const Profile = () => {
           ))}
         </div>
       )}
+      {userListings.length ===0 && (
+        <p className="text-lg text-red-600">You do not have any listing yet</p>
+      )}
     </div>
   );
 };
