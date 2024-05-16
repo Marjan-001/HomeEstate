@@ -33,21 +33,18 @@ const UpdateListing = () => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  
 
-  useEffect(()=>{
- const fetchListing = async ()=>{
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
 
-  const listingId = params.listingId;
+      const res = await fetch(`/api/listing/getListing/${listingId}`);
+      const data = await res.json();
+      setFormData(data);
+    };
 
-  const res = await fetch (`/api/listing/getListing/${listingId}`)
-  const data = await res.json();
-  setFormData(data)
-
- }
-
- fetchListing()
-  }, [params.listingId])
+    fetchListing();
+  }, [params.listingId]);
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -312,7 +309,9 @@ const UpdateListing = () => {
               />
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
-                <span className="text-xs">($ / month)</span>
+                {formData.type === "rent" && (
+                  <span className="text-xs">($ / month)</span>
+                )}
               </div>
             </div>
             {formData.offer && (
@@ -328,7 +327,9 @@ const UpdateListing = () => {
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
-                  <span className="text-xs">($ / month)</span>
+                  {formData.type === "rent" && (
+                    <span className="text-xs">($ / month)</span>
+                  )}
                 </div>
               </div>
             )}

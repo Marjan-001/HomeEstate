@@ -7,10 +7,10 @@ import {
 import { useState } from "react";
 import { app } from "../firbase.config";
 import { useSelector } from "react-redux";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 const CreateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [files, setfiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -136,7 +136,7 @@ const CreateListing = () => {
 
       setLoading(true);
       setError(false);
-      const res = await fetch('/api/listing/createlisting', {
+      const res = await fetch("/api/listing/createlisting", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,8 +152,7 @@ const CreateListing = () => {
         setError(data.messgage);
       }
 
-      navigate(`/listing/${data._id}`)
-      
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -296,7 +295,9 @@ const CreateListing = () => {
               />
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
-                <span className="text-xs">($ / month)</span>
+                {formData.type === "rent" && (
+                  <span className="text-xs">($ / month)</span>
+                )}
               </div>
             </div>
             {formData.offer && (
@@ -308,12 +309,14 @@ const CreateListing = () => {
                   max="3000"
                   onChange={handleChange}
                   value={formData.discountPrice}
-                 
                   className="p-1 border border-gray-600 rounded-lg"
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
-                  <span className="text-xs">($ / month)</span>
+
+                  {formData.type === "rent" && (
+                    <span className="text-xs">($ / month)</span>
+                  )}
                 </div>
               </div>
             )}
@@ -368,7 +371,10 @@ const CreateListing = () => {
                 </button>
               </div>
             ))}
-          <button disabled={loading || uploading} className="p-3 bg-indigo-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+          <button
+            disabled={loading || uploading}
+            className="p-3 bg-indigo-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          >
             {loading ? "Loading..." : "Create Listing"}
           </button>
           {error && <p className=" text-red-700 text-sm">{error}</p>}
