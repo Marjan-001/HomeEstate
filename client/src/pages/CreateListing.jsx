@@ -32,7 +32,7 @@ const CreateListing = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleImageSubmit = (e) => {
+  const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -50,7 +50,7 @@ const CreateListing = () => {
           setImageUploadError(false);
           setUploading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setImageUploadError("Image upload failed (2 mb max per image)");
           setUploading(false);
         });
@@ -206,7 +206,7 @@ const CreateListing = () => {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                id="sell"
+                id="sale"
                 className="w-5"
                 onChange={handleChange}
                 checked={formData.type === "sell"}
