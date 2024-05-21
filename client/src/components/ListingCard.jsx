@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import { FaMapSigns } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Listing from "../../../server/model/listing.model";
 
 const ListingCard = ({ item }) => {
   
@@ -29,7 +29,7 @@ const ListingCard = ({ item }) => {
               <p className="truncate w-full">{item.address}</p>
             </div>
             <p className="line-clamp-2">{item.description}</p>
-            <div className="card-actions justify-start">
+            <div className="card-actions justify-start ">
               <p className="font-bold text-indigo-400 text-xl flex items-center ">
                 {" "}
                 ${" "}
