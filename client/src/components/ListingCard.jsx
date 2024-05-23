@@ -34,8 +34,8 @@ const ListingCard = ({ item }) => {
                 {" "}
                 ${" "}
                 {item.offer
-                  ? item.discountPrice.toLocaleString("en-US")
-                  : item.regularPrice.toLocaleString("en-US")}
+              ? item.discountPrice
+              : item.regularPrice}
                 {item.type === "rent" && "/ month"}
               </p>
             </div>

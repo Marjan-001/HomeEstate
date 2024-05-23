@@ -40,11 +40,15 @@ const UpdateListing = () => {
 
       const res = await fetch(`/api/listing/getListing/${listingId}`);
       const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
       setFormData(data);
     };
 
     fetchListing();
-  }, [params.listingId]);
+  }, []);
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -198,7 +202,7 @@ const UpdateListing = () => {
             type="text"
             placeholder="Description"
             className="border p-3 rounded-md"
-            maxLength="50"
+            maxLength="200"
             minLength="8"
             id="description"
             onChange={handleChange}
@@ -244,7 +248,7 @@ const UpdateListing = () => {
                 id="furnished"
                 className="w-5"
                 onChange={handleChange}
-                value={formData.furnished}
+                checked={formData.furnished}
               />
               <span>Furnished</span>
             </div>
@@ -254,7 +258,7 @@ const UpdateListing = () => {
                 id="parking"
                 className="w-5"
                 onChange={handleChange}
-                value={formData.parking}
+                checked={formData.parking}
               />
               <span>Parking-spot</span>
             </div>
@@ -264,7 +268,7 @@ const UpdateListing = () => {
                 id="offer"
                 className="w-5"
                 onChange={handleChange}
-                value={formData.offer}
+                checked={formData.offer}
               />
               <span>Offer</span>
             </div>
@@ -320,10 +324,11 @@ const UpdateListing = () => {
                   type="number"
                   id="discountPrice"
                   min="0"
-                  max="3000"
+                  max="10000000"
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
                   onChange={handleChange}
                   value={formData.discountPrice}
-                  className="p-1 border border-gray-600 rounded-lg"
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>

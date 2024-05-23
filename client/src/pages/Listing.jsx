@@ -25,13 +25,19 @@ const Listing = () => {
   const [contact, setContact] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
-
+  
+  console.log(listing)
   useEffect(() => {
     const fetchListing = async () => {
       try {
         setLoading(true);
         const res = await fetch(`/api/listing/getListing/${params.listingId}`);
         const data = await res.json();
+        if (data.success === false) {
+          setError(true);
+          setLoading(false);
+          return;
+        }
         setListing(data);
         setLoading(false);
         setError(false);
@@ -86,11 +92,11 @@ const Listing = () => {
           )}
           <div className="  flex flex-col max-w-4xl mx-auto p-2 my-3 gap-4">
             <p className=" text-xl lg:text-2xl font-bold text-indigo-700">
-              {listing.name} - ${""}
+            {listing.name} - ${' '}
               {listing.offer
-                ? listing.discountPrice.toLocaleString("en-US")
-                : listing.regularPrice.toLocaleString("en-US")}
-              {listing.type === "rent" && " / month"}
+                ? (+listing.regularPrice - +listing.discountPrice)
+                : listing.regularPrice.toLocaleString('en-US')}
+              {listing.type === 'rent' && ' / month'}
             </p>
             <p className="flex gap-2 items-center text-slate-800 text-sm">
               <FaMapMarkerAlt className="text-blue-500" />
@@ -102,7 +108,7 @@ const Listing = () => {
               </p>
               {listing.offer && (
                 <p className="bg-blue-600 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountPrice}
+                  ${ +listing.discountPrice} OFF
                 </p>
               )}
             </div>

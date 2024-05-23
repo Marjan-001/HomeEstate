@@ -30,11 +30,13 @@ if(searchTermFromUrl){
   return (
     <header className="bg-indigo-700 shadow-lg">
       <div className="flex justify-between items-center mx-auto max-w-6xl p-2">
+        <Link to={'/'}>
         <h1 className="text-sm lg:text-2xl font-semibold flex flex-wrap items-center">
           <FaHome className="text-white" />
           <span className="text-white">Home</span>
           <span className="text-white">Estate</span>
         </h1>
+        </Link>
         <form
           onSubmit={handleSubmit}
           className="bg-white py-2 pX-3 rounded-lg flex items-center"
