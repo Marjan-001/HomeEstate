@@ -2,11 +2,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import { useDispatch } from "react-redux";
+import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
 
 const Register = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
 
   const navigate = useNavigate();
 
@@ -22,6 +25,8 @@ const Register = () => {
 
     try {
       setLoading(true);
+      dispatch(signInStart())
+
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -32,14 +37,16 @@ const Register = () => {
       const data = await res.json();
       if (data.success === false) {
         setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message))
         return;
       }
       setLoading(false);
-      setError(null);
-      navigate("/signin");
+      dispatch(signInSuccess(data))
+
+      navigate("/");
     } catch (error) {
       setLoading(false);
+      dispatch(signInFailure(error.message))
 
       setError(error.message);
     }

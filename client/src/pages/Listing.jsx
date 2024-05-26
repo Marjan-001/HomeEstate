@@ -26,7 +26,6 @@ const Listing = () => {
 
   const { currentUser } = useSelector((state) => state.user);
   
-  console.log(listing)
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -139,7 +138,7 @@ const Listing = () => {
               </li>
             </ul>
 
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
+            {currentUser  && listing.userRef !== currentUser._id && !contact && (
               <button
                 onClick={() => setContact(true)}
                 className="bg-indigo-700 mt-4 w-[180px] text-white rounded-lg uppercase hover:opacity-95 p-3"

@@ -6,11 +6,24 @@ import jwt from "jsonwebtoken";
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  const bcryptPassword = bcryptjs.hash(password, 10);
-  const newUser = new User({ username, email, password: bcryptPassword });
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+  const newUser = new User({ username, email, password: hashedPassword });
   try {
+
     await newUser.save();
-    res.status(201).json("user created successfully");
+   // Generate JWT token
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expiration time
+    });
+
+    // Exclude the password from the user object
+    const { password: pass, ...rest } = newUser._doc;
+
+    // Send the token in a cookie and include the user data in the response
+    res
+      .cookie('access_token', token, { httpOnly: true })
+      .status(201)
+      .json({ message: 'User created successfully', user: rest });
   } catch (error) {
     next(error);
   }
@@ -35,7 +48,6 @@ export const signin = async (req, res, next) => {
   }
 };
 
-
 export const google = async (req, res, next) => {
   try {
     const { email, name, photo } = req.body;
@@ -51,7 +63,10 @@ export const google = async (req, res, next) => {
       const { password, ...userData } = user._doc;
 
       // Send token and user data in response
-      res.cookie('access_token', token, { httpOnly: true }).status(200).json(userData);
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(userData);
     } else {
       // User doesn't exist, create a new user
       const generatedPassword =
@@ -60,36 +75,38 @@ export const google = async (req, res, next) => {
       const hashedPassword = await bcryptjs.hash(generatedPassword, 10);
 
       const newUser = new User({
-        username: name ,
+        username: name,
         email,
         password: hashedPassword,
-        avatar: photo
+        avatar: photo,
       });
 
       await newUser.save();
 
       // Generate JWT token for the new user
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: '1h' // Token expires in 1 hour (adjust as needed)
+        expiresIn: "1h", // Token expires in 1 hour (adjust as needed)
       });
 
       // Remove sensitive fields (e.g., password) before sending the response
       const { password, ...userData } = newUser._doc;
 
       // Send token and user data in response
-      res.cookie('access_token', token, { httpOnly: true }).status(200).json(userData);
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(userData);
     }
   } catch (error) {
     next(error); // Forward the error to the global error handler
   }
 };
 
-export const signOut= async(req,res,next)=>{
+export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie('access_token');
-    res.status(200).json('User has been logged out')
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out");
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-
+};

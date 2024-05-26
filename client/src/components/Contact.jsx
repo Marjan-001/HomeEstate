@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -21,6 +22,7 @@ const Contact = ({ listing }) => {
     };
 
     fetchLandloard();
+  // eslint-disable-next-line react/prop-types
   }, [listing.userRef]);
 
   return (
